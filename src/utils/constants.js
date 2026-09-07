@@ -1,6 +1,8 @@
 // Keeping shared values in one file makes the app easier to maintain.
 // Beginners can update the default model here without hunting through UI code.
-export const OLLAMA_API_URL = 'http://localhost:11434/api/generate'
+// We call Ollama through the Vite dev server proxy during local development.
+// This keeps the browser request same-origin and avoids common CORS issues.
+export const OLLAMA_API_URL = '/ollama/api/generate'
 
 // Change this constant if you want to teach with a different local model.
 export const DEFAULT_MODEL = 'llama3'

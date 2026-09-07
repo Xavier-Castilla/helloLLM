@@ -8,13 +8,19 @@ This repository is educational first and feature-rich second. Every major file c
 
 Ollama is a local runtime for large language models (LLMs). It lets you download models such as `llama3`, `mistral`, and `qwen`, then interact with them through a local command line interface and a local REST API.
 
-That means your React application can send prompts to:
+Ollama's native endpoint is:
 
 ```txt
 http://localhost:11434/api/generate
 ```
 
-without needing a cloud API key.
+This tutorial routes browser requests through the Vite dev server proxy, so the React app actually calls:
+
+```txt
+/ollama/api/generate
+```
+
+and Vite forwards that request to `http://localhost:11434/api/generate` without needing a cloud API key.
 
 ## Why run LLMs locally?
 
@@ -95,6 +101,19 @@ ollama serve
 
 Keep this terminal running while your React app is making requests.
 
+## Why the Vite proxy matters
+
+If your React app tries to call `http://localhost:11434` directly from the browser, the request can fail because the browser treats it as a cross-origin request.
+
+This repository avoids that beginner pain point by using a Vite development proxy:
+
+```txt
+Browser -> http://localhost:5173/ollama/api/generate
+Vite proxy -> http://localhost:11434/api/generate
+```
+
+That means you usually do **not** need to configure Ollama CORS manually for local development with this project.
+
 ## Download a model
 
 Example using `llama3`:
@@ -156,7 +175,7 @@ Expected behavior:
 Example browser console / network expectations:
 
 ```txt
-POST http://localhost:11434/api/generate 200 OK
+POST http://localhost:5173/ollama/api/generate 200 OK
 Request body: {"model":"llama3","prompt":"You are a senior React engineer who explains concepts to beginners.\n\nUser: Explain React hooks simply.","stream":false,"options":{"temperature":0.7}}
 ```
 
@@ -204,7 +223,7 @@ flowchart TD
 This project calls the Ollama REST API with `fetch()`:
 
 ```js
-const response = await fetch('http://localhost:11434/api/generate', {
+const response = await fetch('/ollama/api/generate', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -315,6 +334,7 @@ This project teaches how to handle:
 - **Ollama not running** – show a clear message telling the user to start `ollama serve`
 - **Model not installed** – explain how to run `ollama pull <model-name>`
 - **Network issues** – catch fetch errors and show a friendly fallback
+- **CORS / browser access issues** – avoid them in development by using the included Vite proxy
 - **Empty prompts** – validate the input before calling the API
 
 ## Best practices
