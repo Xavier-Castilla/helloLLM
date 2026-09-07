@@ -68,13 +68,6 @@ export function useChat() {
           : caughtError.message || ERROR_MESSAGES.generic
 
       setError(errorMessage)
-      setMessages((currentMessages) => [
-        ...currentMessages,
-        createMessage(
-          'assistant',
-          'I could not finish that request. Review the error panel below for troubleshooting steps.',
-        ),
-      ])
     } finally {
       setIsLoading(false)
     }
