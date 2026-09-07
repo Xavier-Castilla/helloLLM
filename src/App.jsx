@@ -63,7 +63,7 @@ function App() {
 
         {/* These child components receive data and callbacks as props.
             This is a core React pattern called one-way data flow. */}
-        <ChatWindow liveMessage={liveMessage} messages={messages} />
+        <ChatWindow isLoading={isLoading} liveMessage={liveMessage} messages={messages} />
         <PromptInput
           error={error}
           isLoading={isLoading}

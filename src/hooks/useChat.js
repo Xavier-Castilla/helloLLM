@@ -38,13 +38,13 @@ export function useChat() {
     // Prompt validation prevents avoidable API requests and improves UX.
     if (!trimmedPrompt) {
       setError(ERROR_MESSAGES.emptyPrompt)
-      return
+      return false
     }
 
     // State updates are asynchronous, so a ref gives us an immediate guard
     // against accidental double-submits.
     if (isPendingRef.current) {
-      return
+      return false
     }
 
     isPendingRef.current = true
@@ -70,6 +70,7 @@ export function useChat() {
           completion.text || 'The model responded, but no text was returned.',
         ),
       ])
+      return true
     } catch (caughtError) {
       const errorMessage =
         caughtError instanceof TypeError
@@ -77,6 +78,7 @@ export function useChat() {
           : caughtError.message || ERROR_MESSAGES.generic
 
       setError(errorMessage)
+      return false
     } finally {
       isPendingRef.current = false
       setIsLoading(false)

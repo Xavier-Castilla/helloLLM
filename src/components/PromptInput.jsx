@@ -9,11 +9,11 @@ function PromptInput({ error, isLoading, model, onModelChange, onSend }) {
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    await onSend({ prompt })
+    const wasSuccessful = await onSend({ prompt })
 
     // We only clear the field when the prompt contains actual text.
-    // This avoids wiping out accidental blank submissions.
-    if (prompt.trim()) {
+    // This avoids wiping out accidental blank submissions or failed requests.
+    if (wasSuccessful) {
       setPrompt('')
     }
   }

@@ -2,7 +2,7 @@ import Message from './Message'
 
 // React receives updated state and re-renders the message list automatically.
 // That makes chat UIs a good way to teach one-way data flow.
-function ChatWindow({ liveMessage, messages }) {
+function ChatWindow({ isLoading, liveMessage, messages }) {
   return (
     <section className="chat-window">
       <p className="sr-only" aria-live="polite">
@@ -14,7 +14,7 @@ function ChatWindow({ liveMessage, messages }) {
         <Message key={message.id} role={message.role} content={message.content} />
       ))}
 
-      {liveMessage === 'Assistant is generating a response from your local model.' ? (
+      {isLoading ? (
         <article className="message assistant">
           <div className="message-badge">AI</div>
           <div>
