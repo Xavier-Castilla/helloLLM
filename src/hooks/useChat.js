@@ -32,6 +32,7 @@ export function useChat() {
     temperature = 0.7,
   }) => {
     const trimmedPrompt = prompt.trim()
+    const selectedModel = model
 
     // Prompt validation prevents avoidable API requests and improves UX.
     if (!trimmedPrompt) {
@@ -48,7 +49,7 @@ export function useChat() {
     try {
       // async/await keeps asynchronous code readable for beginners.
       const completion = await generateCompletion({
-        model,
+        model: selectedModel,
         prompt: trimmedPrompt,
         systemPrompt,
         temperature,

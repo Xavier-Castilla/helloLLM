@@ -28,8 +28,14 @@ export async function generateCompletion({ model, prompt, systemPrompt = '', tem
   // offline, missing models, or return unexpected responses.
   if (!response.ok) {
     const responseText = await response.text()
+    const normalizedResponseText = responseText.toLowerCase()
 
-    if (response.status === 404 || responseText.toLowerCase().includes('model')) {
+    if (
+      normalizedResponseText.includes('model') &&
+      (normalizedResponseText.includes('not found') ||
+        normalizedResponseText.includes('pull') ||
+        normalizedResponseText.includes('missing'))
+    ) {
       throw new Error(ERROR_MESSAGES.missingModel)
     }
 
