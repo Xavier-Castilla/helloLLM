@@ -27,8 +27,18 @@ export async function generateCompletion({ model, prompt, systemPrompt = '', tem
   // Error handling matters for AI integrations because local services can be
   // offline, missing models, or return unexpected responses.
   if (!response.ok) {
-    const responseText = await response.text()
-    const normalizedResponseText = responseText.toLowerCase()
+    const contentType = response.headers.get('content-type') || ''
+    let responseMessage = ''
+
+    if (contentType.includes('application/json')) {
+      const errorData = await response.json()
+      responseMessage =
+        typeof errorData.error === 'string' ? errorData.error : JSON.stringify(errorData)
+    } else {
+      responseMessage = await response.text()
+    }
+
+    const normalizedResponseText = responseMessage.toLowerCase()
 
     if (
       normalizedResponseText.includes('model') &&
@@ -39,7 +49,7 @@ export async function generateCompletion({ model, prompt, systemPrompt = '', tem
       throw new Error(ERROR_MESSAGES.missingModel)
     }
 
-    throw new Error(responseText || ERROR_MESSAGES.generic)
+    throw new Error(responseMessage || ERROR_MESSAGES.generic)
   }
 
   const data = await response.json()
