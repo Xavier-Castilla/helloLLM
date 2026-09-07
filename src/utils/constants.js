@@ -1,8 +1,12 @@
 // Keeping shared values in one file makes the app easier to maintain.
 // Beginners can update the default model here without hunting through UI code.
-// We call Ollama through the Vite dev server proxy during local development.
+// The API URL is configurable so learners can keep the simple Vite proxy in
+// development or point at another safe endpoint later.
+const DEFAULT_OLLAMA_API_URL = '/ollama/api/generate'
+
+// By default we call Ollama through the Vite dev server proxy.
 // This keeps the browser request same-origin and avoids common CORS issues.
-export const OLLAMA_API_URL = '/ollama/api/generate'
+export const OLLAMA_API_URL = import.meta.env.VITE_OLLAMA_API_URL || DEFAULT_OLLAMA_API_URL
 
 // Change this constant if you want to teach with a different local model.
 export const DEFAULT_MODEL = 'llama3'

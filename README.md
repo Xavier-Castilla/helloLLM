@@ -141,6 +141,20 @@ ollama list
 npm install
 ```
 
+Optional: create a local environment file if you want to override the API path:
+
+```bash
+cp .env.example .env
+```
+
+The default value points to the included Vite proxy:
+
+```txt
+VITE_OLLAMA_API_URL=/ollama/api/generate
+```
+
+For production-style deployments, point this variable at your own same-origin backend or proxy route instead of relying on the Vite development server.
+
 ## Start the development server
 
 ```bash
@@ -305,7 +319,7 @@ and read the response incrementally.
 Example concept:
 
 ```js
-const response = await fetch('http://localhost:11434/api/generate', {
+const response = await fetch('/ollama/api/generate', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
