@@ -157,7 +157,7 @@ Example browser console / network expectations:
 
 ```txt
 POST http://localhost:11434/api/generate 200 OK
-Request body: {"model":"llama3","prompt":"Explain React hooks simply.","stream":false}
+Request body: {"model":"llama3","prompt":"You are a senior React engineer who explains concepts to beginners.\n\nUser: Explain React hooks simply.","stream":false,"options":{"temperature":0.7}}
 ```
 
 Expected UI sections:
@@ -211,8 +211,12 @@ const response = await fetch('http://localhost:11434/api/generate', {
   },
   body: JSON.stringify({
     model: 'llama3',
-    prompt: 'Explain React hooks simply',
+    prompt:
+      'You are a senior React engineer who explains concepts to beginners.\n\nUser: Explain React hooks simply',
     stream: false,
+    options: {
+      temperature: 0.7,
+    },
   }),
 })
 ```

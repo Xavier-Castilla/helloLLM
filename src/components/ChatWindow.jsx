@@ -2,11 +2,11 @@ import Message from './Message'
 
 // React receives updated state and re-renders the message list automatically.
 // That makes chat UIs a good way to teach one-way data flow.
-function ChatWindow({ isLoading, liveMessage, messages }) {
+function ChatWindow({ isLoading, liveStatus, messages }) {
   return (
     <section className="chat-window">
       <p className="sr-only" aria-live="polite">
-        {liveMessage}
+        {liveStatus}
       </p>
 
       {/* Mapping over arrays is how React renders repeated UI from state. */}
@@ -19,7 +19,7 @@ function ChatWindow({ isLoading, liveMessage, messages }) {
           <div className="message-badge">AI</div>
           <div>
             <p className="message-role">Assistant</p>
-            <p className="message-content">{liveMessage}</p>
+            <p className="message-content">{liveStatus}</p>
           </div>
         </article>
       ) : null}
