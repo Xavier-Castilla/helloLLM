@@ -60,7 +60,7 @@ src/
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 20.19+ or 22.12+
 - Ollama installed locally
 
 ## Install Ollama

@@ -9,6 +9,11 @@ function App() {
   const { error, isLoading, lastAssistantMessage, messages, model, sendMessage, setModel } =
     useChat()
   const latestReplyPreview = lastAssistantMessage?.content || 'No response yet'
+  const liveMessage = isLoading
+    ? 'Assistant is generating a response from your local model.'
+    : messages.length > 1 && lastAssistantMessage
+      ? lastAssistantMessage.content
+      : ''
 
   return (
     <main className="app-shell">
@@ -58,7 +63,7 @@ function App() {
 
         {/* These child components receive data and callbacks as props.
             This is a core React pattern called one-way data flow. */}
-        <ChatWindow messages={messages} isLoading={isLoading} />
+        <ChatWindow liveMessage={liveMessage} messages={messages} />
         <PromptInput
           error={error}
           isLoading={isLoading}

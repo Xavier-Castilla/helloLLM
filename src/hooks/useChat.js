@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { generateCompletion } from '../services/ollamaService'
 import { DEFAULT_MODEL, ERROR_MESSAGES } from '../utils/constants'
 
@@ -20,6 +20,7 @@ export function useChat() {
   const [model, setModel] = useState(DEFAULT_MODEL)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const isPendingRef = useRef(false)
 
   const lastAssistantMessage = useMemo(
     () => [...messages].reverse().find((message) => message.role === 'assistant'),
@@ -40,6 +41,13 @@ export function useChat() {
       return
     }
 
+    // State updates are asynchronous, so a ref gives us an immediate guard
+    // against accidental double-submits.
+    if (isPendingRef.current) {
+      return
+    }
+
+    isPendingRef.current = true
     setIsLoading(true)
     setError('')
 
@@ -70,6 +78,7 @@ export function useChat() {
 
       setError(errorMessage)
     } finally {
+      isPendingRef.current = false
       setIsLoading(false)
     }
   }

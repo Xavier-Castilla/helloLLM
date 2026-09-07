@@ -75,7 +75,11 @@ function PromptInput({ error, isLoading, model, onModelChange, onSend }) {
         </div>
       </div>
 
-      {error ? <p className="error-banner">{error}</p> : null}
+      {error ? (
+        <p className="error-banner" role="alert">
+          {error}
+        </p>
+      ) : null}
     </form>
   )
 }
